@@ -1,0 +1,37 @@
+{
+  "name": "vue-awesome-console",
+  "version": "1.0.0",
+  "description": "vue-awesome-console",
+  "main": "src/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tyawei/vue-awesome-console.git"
+  },
+  "keywords": [
+    "console",
+    "vue3",
+    "Proxy",
+    "Ref"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tyawei/vue-awesome-console/issues"
+  },
+  "homepage": "https://github.com/tyawei/vue-awesome-console#readme",
+  "dependencies": {
+    "vue": "^3.2.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.18.6",
+    "@babel/plugin-transform-runtime": "^7.18.6",
+    "@babel/preset-env": "^7.18.6",
+    "babel-loader": "^8.2.5",
+    "webpack": "^5.73.0",
+    "webpack-cli": "^4.10.0"
+  }
+}
