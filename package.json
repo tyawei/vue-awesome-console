@@ -1,5 +1,6 @@
 {
   "name": "vue-awesome-console",
+  "private": false,
   "version": "1.0.0",
   "description": "vue-awesome-console",
   "main": "src/main.js",
