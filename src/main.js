@@ -54,10 +54,13 @@ const vlog = function() {
   let basicTypes = ['number', 'string', 'boolean', 'undefined', 'symbol', 'array', 'date', 'regexp', 'null', 'function', 'undefined']
   // 保存从 object 里面获得的原始值
   let arr = []
+  // 窗口节点类型。通过 getObjType获取的包括 window html.+ 两类
+  // 后者包括 HTMLCollection(如getElementsByTagName获取)、HTMLDocument或者HTML.+Element类型
+  let winTypes = ['window', 'html']
 
   args.forEach(item => {
-    if ( basicTypes.indexOf(getObjType(item).toLowerCase()) >= 0 ) {
-      if ( getObjType(item).toLowerCase() === 'array' ) {
+    if ( basicTypes.indexOf(getObjType(item)) >= 0 ) {
+      if ( getObjType(item) === 'array' ) {
         // 虽然此处是指非object类型的数组，其中可能含有object类型的元素
         let newArr = deepCopy(item) 
         arr.push(newArr)
@@ -70,7 +73,16 @@ const vlog = function() {
     else {
       // object 类型
         let rawValue = ''
-        if ( isReactive(item) ) { 
+        let isWinType = false
+        winTypes.forEach(type => {
+          if ( getObjType(item).indexOf(type) >= 0 ) {
+            isWinType = true
+          }
+        })
+        if ( isWinType ) {
+          rawValue = item
+        }
+        else if ( isReactive(item) ) { 
           // 通过reactive 包装的，是 Proxy代理对象
           rawValue = toRaw(item)
         } 
@@ -89,7 +101,10 @@ const vlog = function() {
           // 非vue3 中的、普通的 json类型
           rawValue = item
         }
-        rawValue = deepCopy(rawValue)
+        // 打印非节点类型
+        if ( !isWinType ) {
+          rawValue = deepCopy(rawValue)
+        }
         arr.push( rawValue )
     }
   })
