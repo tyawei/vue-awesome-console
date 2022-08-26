@@ -51,7 +51,8 @@ const vlog = function() {
   // 获取参数的数组形式
   let args = Array.prototype.slice.call(arguments)
   // 除了 object 之外的数据类型；此处的object 指json类型和vue3中的代理或者包装对象（Proxy、ComputedRefImpl、RefImpl）
-  let basicTypes = ['number', 'string', 'boolean', 'undefined', 'symbol', 'array', 'date', 'regexp', 'null', 'function', 'undefined']
+  let jsBasicTypes = ['number', 'string', 'boolean', 'undefined', 'symbol', 'date', 'regexp', 'null', 'function', 'undefined']
+  let basicTypes = ['array', ...jsBasicTypes]
   // 保存从 object 里面获得的原始值
   let arr = []
   // 窗口节点类型。通过 getObjType获取的包括 window html.+ 两类
@@ -59,7 +60,7 @@ const vlog = function() {
   let winTypes = ['window', 'html']
 
   args.forEach(item => {
-    if ( basicTypes.indexOf(getObjType(item)) >= 0 ) {
+    if ( basicTypes.includes(getObjType(item)) ) {
       if ( getObjType(item) === 'array' ) {
         // 虽然此处是指非object类型的数组，其中可能含有object类型的元素
         let newArr = deepCopy(item) 
@@ -75,7 +76,7 @@ const vlog = function() {
         let rawValue = ''
         let isWinType = false
         winTypes.forEach(type => {
-          if ( getObjType(item).indexOf(type) >= 0 ) {
+          if ( getObjType(item).includes(type) ) {
             isWinType = true
           }
         })
@@ -88,11 +89,11 @@ const vlog = function() {
         } 
         else if ( isRef(item) ) {
           let val = item.value
-          if ( val && isReactive(val) ) {   
+          if ( val && isReactive(val) ) {
             // Ref包装对象，其value是响应式
             rawValue = toRaw(val)
           } 
-          else if ( val && !isReactive(val) ) {  
+          else if ( val && !isReactive(val) ) { 
             // computed 计算属性，其value不是响应式的
             rawValue = val
           } 
@@ -102,7 +103,7 @@ const vlog = function() {
           rawValue = item
         }
         // 打印非节点类型
-        if ( !isWinType ) {
+        if ( !isWinType && !jsBasicTypes.includes(getObjType(rawValue)) ) {
           rawValue = deepCopy(rawValue)
         }
         arr.push( rawValue )
